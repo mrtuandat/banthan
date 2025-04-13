@@ -82,7 +82,7 @@
 
     .skills, .projects {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
 
@@ -97,6 +97,60 @@
     .card:hover {
       transform: translateY(-5px);
     }
+
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      height: 220px;
+    }
+
+    .slide {
+      display: none;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      text-align: center;
+    }
+
+    .slide.active {
+      display: block;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .caption {
+      background: rgba(0,0,0,0.6);
+      color: white;
+      margin: 0;
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
 
     footer {
       background: #222;
@@ -152,13 +206,31 @@
     <h2>📂 Dự án</h2>
     <div class="projects">
       <div class="card">
+        <div class="carousel">
+          <div class="slide active">
+            <img src="https://i.imgur.com/w1URFjS.png" alt="Ảnh 1">
+            <p class="caption">Giao diện trang chủ đơn giản, hiện đại</p>
+          </div>
+          <div class="slide">
+            <img src="https://i.imgur.com/3d0GZK9.png" alt="Ảnh 2">
+            <p class="caption">Trang kỹ năng giới thiệu chi tiết</p>
+          </div>
+          <div class="slide">
+            <img src="https://i.imgur.com/uDGiGoJ.png" alt="Ảnh 3">
+            <p class="caption">Phần liên hệ với form và mạng xã hội</p>
+          </div>
+          <button class="prev">&#10094;</button>
+          <button class="next">&#10095;</button>
+        </div>
         <strong>Portfolio cá nhân</strong><br>
         Thiết kế web giới thiệu bản thân chuyên nghiệp.
       </div>
+
       <div class="card">
         <strong>Shop bán hàng</strong><br>
         Giao diện thân thiện, đầy đủ chức năng giỏ hàng.
       </div>
+
       <div class="card">
         <strong>To-do App</strong><br>
         Ứng dụng quản lý công việc bằng React.
@@ -178,7 +250,7 @@
   </footer>
 
   <script>
-    // Fade-in animation khi scroll
+    // Hiệu ứng scroll
     const sections = document.querySelectorAll("section");
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -190,6 +262,32 @@
 
     sections.forEach(section => {
       observer.observe(section);
+    });
+
+    // Slide ảnh từng dự án
+    document.querySelectorAll('.carousel').forEach(carousel => {
+      const slides = carousel.querySelectorAll('.slide');
+      const prev = carousel.querySelector('.prev');
+      const next = carousel.querySelector('.next');
+      let current = 0;
+
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+        });
+      }
+
+      showSlide(current);
+
+      prev.addEventListener('click', () => {
+        current = (current - 1 + slides.length) % slides.length;
+        showSlide(current);
+      });
+
+      next.addEventListener('click', () => {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+      });
     });
   </script>
 
